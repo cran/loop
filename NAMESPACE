@@ -1,0 +1,6 @@
+import(grid)
+importFrom(MASS,isoMDS)
+
+exportPattern("^[^\\.]") 
+exportClasses()
+exportMethods()
