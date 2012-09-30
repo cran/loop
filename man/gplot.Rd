@@ -10,7 +10,7 @@ this function requires an edge matrix form of graphs, compared to another simila
 function 'gplot1'.
 }
 \usage{
-gplot(edgemat, arrow = TRUE, lty = 1, col = 8)
+gplot(edgemat,arrow=TRUE,lty=1,col=8,weighted=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,11 +28,16 @@ line style for each graph link
   \item{col}{
 line color for each graph link
 }
+  \item{weighted}{
+  if TRUE, the links/edges will be weighted based on the value present in the 3rd column of edgemat,
+  different edges then will have different line widths for representing them. Otherwise, all edges
+  have the same line width. Default is TRUE
+}
 }
 
 \references{
 Chen Y (2012) loop: an R package for performing decomposition of weighted
-directed graphs, food web analysis and flexible network plotting. In preparation.
+directed graphs, food web analysis and flexible network plotting. Submitted.
 }
 \author{
 Youhua Chen <haydi@126.com>

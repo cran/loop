@@ -23,7 +23,7 @@ the node/species you want to search
 
 \references{
 Chen Y (2012) loop: an R package for performing decomposition of weighted
-directed graphs, food web analysis and flexible network plotting. In preparation.
+directed graphs, food web analysis and flexible network plotting. Submitted.
 }
 \author{
 Youhua Chen <haydi@126.com>

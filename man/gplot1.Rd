@@ -9,7 +9,7 @@ don't need to convert square graph matrix into edge form compared to the functio
 "gplot"
 }
 \usage{
-gplot1(gemat, arrow = TRUE, lty = 1, col = 8)
+gplot1(gemat,arrow=TRUE,lty=1,col=8,weighted=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,10 +25,15 @@ line style for the links/edges, default is 1.
   \item{col}{
 color for the links/edges, default is 8 (grey).
 }
+  \item{weighted}{
+  if TRUE, the links/edges will be weighted based on the cell value present in the matrix of gemat,
+  different edges then will have different line widths for representing them. Otherwise, all edges
+  have the same line width. Default is TRUE
+}
 }
 \references{
 Chen Y (2012) loop: an R package for performing decomposition of weighted
-directed graphs, food web analysis and flexible network plotting. In preparation.
+directed graphs, food web analysis and flexible network plotting. Submitted.
 }
 \author{
 Youhua Chen <haydi@126.com>

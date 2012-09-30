@@ -23,7 +23,7 @@ the second column is the ending node
 }
 \references{
 Chen Y (2012) loop: an R package for performing decomposition of weighted
-directed graphs, food web analysis and flexible network plotting. In preparation.
+directed graphs, food web analysis and flexible network plotting. Submitted.
 
 
 Wang HY, Huang Q, Li CZ,Zhu BZ (2010) Graph algorithms and Matlab applications.

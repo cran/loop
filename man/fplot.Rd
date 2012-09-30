@@ -11,7 +11,7 @@ scaling technique, which can take the similarity matrices of the nodes as the in
 generate the positions of the nodes in the space.
 }
 \usage{
-fplot(gemat, type = "both", metric = "jaccard", addlabels = FALSE, scaled = TRUE, pch = 20, bg = 1, pcex = 3, pcol = 4, lty = 1, lcol = 8, tfont = 12, tcol = 1)
+fplot(gemat,type="both",metric="jaccard",addlabels=FALSE,scaled=TRUE,weighted=TRUE,pch=20,bg=1,pcex=3,pcol=4,lty=1,lcol=8,tfont=12,tcol=1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,6 +36,11 @@ if you want to label each node/vertex, set it's status as TRUE; default is FALSE
   \item{scaled}{
 if you want to the links showing relative weights, set it's status as TRUE; default is FALSE
 links with larger weights will have thicker line width, vice versa.
+}
+  \item{weighted}{
+  if TRUE, the links/edges will be weighted based on the cell value present in the matrix of gemat,
+  different edges then will have different line widths for representing them. Otherwise, all edges
+  have the same line width. Default is TRUE
 }
   \item{pch}{
 this pch is for nodes/vertex
@@ -65,7 +70,7 @@ tcol is the color for the labels of the nodes
 }
 \references{
 Chen Y (2012) loop: an R package for performing decomposition of weighted
-directed graphs, food web analysis and flexible network plotting. In preparation.
+directed graphs, food web analysis and flexible network plotting. Submitted.
 }
 \author{
 Youhua Chen <haydi@126.com>

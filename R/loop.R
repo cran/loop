@@ -1,5 +1,6 @@
 #LOOP ANALYSIS
-#2012/6/15
+#version 1.1
+#2012/8/10
 #YOUHUA CHEN
 ###############
 
@@ -278,16 +279,24 @@ return(sort(nodes,decreasing=TRUE))
 }
 
 #plot directed graph in r from edge graph matrix
-gplot<-function(edgemat,arrow=TRUE,lty=1,col=8)
+gplot<-function(edgemat,arrow=TRUE,lty=1,col=8,weighted=TRUE)
 {
 grid.newpage()
 pi=3.141593
 mat<-edgemat
-num<-length(unique(as.vector(mat[,1:2])))
+mat[,1]<-edgemat[,2]
+mat[,2]<-edgemat[,1]
+num<-unique(as.vector(mat[,1:2]))
 edges<-dim(mat)[1]
+if(weighted==TRUE)
+{
 w<-mat[,3]/max(mat[,3])*5 #weights in each edge
+}else
+{
+w<-rep(1,1,length(num))
+}
 #
-if(num>50)
+if(length(num)>50)
 {
 r<-.4
 arrowsize<-.001
@@ -310,42 +319,42 @@ break
 }
 
 #create the coordinates for each species
-xy<-matrix(0,ncol=2,nrow=num)
+xy<-matrix(0,ncol=2,nrow=max(num))
 pxy<-xy
 name<-xy
 t1<-xy
 t2<-xy
 o<-xy
-for(i in 1:num)
+for(i in 1:length(num))
 {
-ang<-2*pi/num*(i-1)
-xy[i,1]<-.5+r*sin(ang)
-xy[i,2]<-.5+r*cos(ang)
+ang<-2*pi/length(num)*(i-1)
+xy[num[i],1]<-.5+r*sin(ang)
+xy[num[i],2]<-.5+r*cos(ang)
 if(self==FALSE)
 {
-name[i,1]<-.5+(r+.05)*sin(ang)
-name[i,2]<-.5+(r+.05)*cos(ang)
+name[num[i],1]<-.5+(r+.05)*sin(ang)
+name[num[i],2]<-.5+(r+.05)*cos(ang)
 }else
 {
-name[i,1]<-.5+(r+.1)*sin(ang)
-name[i,2]<-.5+(r+.1)*cos(ang)
-t1[i,1]<-.5+(r+.014)*sin(ang)
-t1[i,2]<-.5+(r+.014)*cos(ang)
-t2[i,1]<-.5+(r+.08)*sin(ang)
-t2[i,2]<-.5+(r+.08)*cos(ang)
-o[i,1]<-.5+(r+.047)*sin(ang) #radius=.01
-o[i,2]<-.5+(r+.047)*cos(ang)
+name[num[i],1]<-.5+(r+.1)*sin(ang)
+name[num[i],2]<-.5+(r+.1)*cos(ang)
+t1[num[i],1]<-.5+(r+.014)*sin(ang)
+t1[num[i],2]<-.5+(r+.014)*cos(ang)
+t2[num[i],1]<-.5+(r+.08)*sin(ang)
+t2[num[i],2]<-.5+(r+.08)*cos(ang)
+o[num[i],1]<-.5+(r+.047)*sin(ang) #radius=.01
+o[num[i],2]<-.5+(r+.047)*cos(ang)
 radius=.047
 }
-pxy[i,1]<-.5+(r+.01)*sin(ang)
-pxy[i,2]<-.5+(r+.01)*cos(ang)
-grid.points(unit(pxy[i,1],"npc"),unit(pxy[i,2],"npc"),pch=20,gp=gpar(col=4))
-if(name[i,1]<=.5)
+pxy[num[i],1]<-.5+(r+.01)*sin(ang)
+pxy[num[i],2]<-.5+(r+.01)*cos(ang)
+grid.points(unit(pxy[num[i],1],"npc"),unit(pxy[num[i],2],"npc"),pch=20,gp=gpar(col=4))
+if(name[num[i],1]<=.5)
 {
-grid.text(as.character(i),unit(name[i,1],"npc"),unit(name[i,2],"npc"),just="left")
+grid.text(as.character(num[i]),unit(name[num[i],1],"npc"),unit(name[num[i],2],"npc"),just="left")
 }else
 {
-grid.text(as.character(i),unit(name[i,1],"npc"),unit(name[i,2],"npc"),just="right")
+grid.text(as.character(num[i]),unit(name[num[i],1],"npc"),unit(name[num[i],2],"npc"),just="right")
 }
 }
 #draw lines or curves from graph matrix
@@ -408,10 +417,10 @@ grid.xspline(x=c(xy[mat[i,1],1],(xy[mat[i,1],1]+xy[mat[i,2],1])/2,xy[mat[i,2],1]
 }#end function
 
 #plot directed graphs directly from square graph matrix
-gplot1<-function(gemat,arrow=TRUE,lty=1,col=8)
+gplot1<-function(gemat,arrow=TRUE,lty=1,col=8,weighted=TRUE)
 {
 mat<-convertion(gemat=gemat)
-gplot(edgemat=mat,arrow=arrow,lty=lty,col=col)
+gplot(edgemat=mat,arrow=arrow,lty=lty,col=col,weighted=weighted)
 }
 
 #convert graph matrix form into edge form
@@ -496,13 +505,20 @@ flag=1
 #backward search
 backone<-length(flist)
 onetime<-backone
-while(length(flist[[backone]]$desc)==0)
-{
-if(onetime>0 & is.na(thisnode)==FALSE)
-{
+#
+###
+#for the case when $desc!=0, but out.index==0
 ps[[length(ps)+1]]<-c(thisloop,thisnode)
 pw[[length(pw)+1]]<-c(weight,gemat[thisloop[length(thisloop)],thisnode])
-}
+###
+#
+while(length(flist[[backone]]$desc)==0)
+{
+# if(onetime>0 & is.na(thisnode)==FALSE)
+# {
+# ps[[length(ps)+1]]<-c(thisloop,thisnode)
+# pw[[length(pw)+1]]<-c(weight,gemat[thisloop[length(thisloop)],thisnode])
+# }
 #
 unchecked<-unchecked[-flist[[backone]]$ansc]
 flist[[backone]]<-NULL
@@ -516,6 +532,7 @@ flag=0
 break
 }
 }#while backone
+#
 if(flag==1)
 {
 thisnode<-flist[[backone]]$desc[1]
@@ -566,6 +583,8 @@ upw<-list()
 #
 up[[1]]<-paths$pathways[[1]]
 upw[[1]]<-paths$pathwayweights[[1]]
+if(num>1)
+{
 for(i in 2:num)
 {
 can<-paths$pathways[[i]]
@@ -588,6 +607,7 @@ up[[length(up)+1]]<-can
 upw[[length(upw)+1]]<-paths$pathwayweights[[i]]
 }
 }#i
+}#if
 return(list(paths=up,weights=upw))
 }
 
@@ -866,7 +886,7 @@ return(list(coord=xy,names=names))
 #plot network using Non-dimensional scaling technique to allow similar nodes
 #gather together, while dissimilar nodes separated
 #require(MASS)
-fplot<-function(gemat,type="both",metric="jaccard",addlabels=FALSE,scaled=TRUE,pch=20,bg=1,pcex=3,pcol=4,lty=1,lcol=8,tfont=12,tcol=1)
+fplot<-function(gemat,type="both",metric="jaccard",addlabels=FALSE,scaled=TRUE,weighted=TRUE,pch=20,bg=1,pcex=3,pcol=4,lty=1,lcol=8,tfont=12,tcol=1)
 {
 dat<-nmds.ordination(gemat=gemat,type=type,metric=metric)
 num<-dim(gemat)[1]
@@ -881,7 +901,13 @@ x1<-dat$coord[edges[i,1],1]
 y1<-dat$coord[edges[i,1],2]
 x2<-dat$coord[edges[i,2],1]
 y2<-dat$coord[edges[i,2],2]
+if(weighted==TRUE)
+{
 wei<-edges[i,3]/maxi*5
+}else
+{
+wei<-rep(1,1,length(edges[,3]))
+}
 if(scaled==TRUE)
 {
 segments(x1,y1,x2,y2,col=lcol,lty=lty,lwd=wei)
@@ -994,7 +1020,7 @@ text(dat,labels=names,font=tfont[j],col=tcol[j])
 
 #food web plot
 #a special plot for food webs following vertical cascades!
-fplot.foodweb<-function(gemat,ranks,addlabels=FALSE,scaled=TRUE,pch=20,bg=1,pcex=3,pcol=4,lty=1,lcol=8,tfont=12,tcol=1)
+fplot.foodweb<-function(gemat,ranks,addlabels=FALSE,scaled=TRUE,weighted=TRUE,pch=20,bg=1,pcex=3,pcol=4,lty=1,lcol=8,tfont=12,tcol=1)
 {
 dat<-list()
 num<-dim(gemat)[1]
@@ -1016,6 +1042,8 @@ for(j in 1:length(sp))
 dat$coord[sp[j],1]<-j/length(sp)
 dat$coord[sp[j],2]<-y
 }
+if(length(sp)>1)
+{
 for(j in 1:length(sp))
 {
 if(length(which(gemat[sp[j],sp[-j]]>0))>0)
@@ -1027,6 +1055,7 @@ ymin<-min(dat$coord[this,2])
 dat$coord[sp[j],2]<-ymin-y*.05 #lower than other species in the same rank
 }
 }#j
+}
 midpoint<-(max(dat$coord[sp,1])-min(dat$coord[sp,1]))/2
 #move towards the centre
 distance<-.5-midpoint
@@ -1045,7 +1074,13 @@ x1<-dat$coord[edges[i,1],1]
 y1<-dat$coord[edges[i,1],2]
 x2<-dat$coord[edges[i,2],1]
 y2<-dat$coord[edges[i,2],2]
+if(weighted==TRUE)
+{
 wei<-edges[i,3]/maxi*5
+}else
+{
+wei=1
+}
 if(scaled==TRUE)
 {
 segments(x1,y1,x2,y2,col=lcol,lty=lty,lwd=wei)
@@ -1060,6 +1095,49 @@ if(addlabels==TRUE)
 text(dat$coord,labels=dat$names,font=tfont,col=tcol)
 }
 }
+
+
+#make food trophic ranks for all the species in the matrix for fplot.foodweb function
+#gemat is a square matrix
+find.ranks<-function(gemat,converted=TRUE)
+{
+spnum<-dim(gemat)[1]
+ranks<-rep(0,1,spnum)
+ranks[1]<-1
+for(i in 2:spnum)
+{
+ind<-which(gemat[i,1:(i-1)]>0)
+if(length(ind)==0)
+{
+ranks[i]<-1
+}else
+{
+ranks[i]<-max(ranks[ind])+1
+}
+}#i
+#adjust top species' ranks
+ranks[length(ranks)]=max(ranks)
+top<-max(ranks)
+for(i in 1:(spnum-1))
+{
+if(length(which(gemat[(i+1):spnum,i]>0))==0)
+{
+ranks[i]=top
+}
+}
+if(converted==TRUE)
+{
+maxi<-max(ranks)
+this<-ranks
+ranks<-list()
+for(i in 1:maxi)
+{
+ranks[[i]]<-which(this==i)
+}
+}#converted
+return(ranks)
+}
+
 
 #food web group plot
 #a special group plot for food webs following vertical cascades!

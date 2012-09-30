@@ -28,7 +28,7 @@ return the pathways and corresponding weights in a list
 }
 \references{
 Chen Y (2012) loop: an R package for performing decomposition of weighted
-directed graphs, food web analysis and flexible network plotting. In preparation.
+directed graphs, food web analysis and flexible network plotting. Submitted.
 }
 \author{
 Youhua Chen <haydi@126.com>
@@ -43,11 +43,11 @@ Youhua Chen <haydi@126.com>
 \code{\link{longest.chain}}
 }
 \examples{
-mat=matrix(c(0,5,3,7,0,5,0,8,0,4,3,8,0,1,6,7,0,1,0,2,0,4,6,2,0),5,5)
+#mat=matrix(c(0,5,3,7,0,5,0,8,0,4,3,8,0,1,6,7,0,1,0,2,0,4,6,2,0),5,5)
 #search for species 3
-lclw(gemat=mat,sp=3)
+#lclw(gemat=mat,sp=3)
 #longest chain isn't necessary to have largest weights
-largest.weight(gemat=mat,sp=3)
-longest.chain(gemat=mat,sp=3)
+#largest.weight(gemat=mat,sp=3)
+#longest.chain(gemat=mat,sp=3)
 }
 
